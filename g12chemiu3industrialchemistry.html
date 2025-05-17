@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Industrial Chemistry Quiz</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background-color: #f3f4f6;
+      font-family: Arial, sans-serif;
+    }
+    .quiz-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .question {
+      margin-bottom: 20px;
+    }
+    .option {
+      display: block;
+      margin: 10px 0;
+    }
+    .navigation {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
+    .results {
+      margin-top: 20px;
+    }
+    .correct {
+      color: green;
+    }
+    .incorrect {
+      color: red;
+    }
+    #back-to-top {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #3b82f6;
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.3s;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+    #back-to-top.visible {
+      opacity: 1;
+    }
+    #back-to-top:hover {
+      background-color: #2563eb;
+    }
+  </style>
+</head>
+<body>
+  <div class="quiz-container">
+    <h1 class="text-2xl font-bold text-center mb-6">Industrial Chemistry Quiz</h1>
+    
+    <div id="quiz-content"></div>
+    <div id="navigation" class="navigation"></div>
+    <div id="results" class="results"></div>
+  </div>
+  <div id="back-to-top" title="Back to Top">⇧</div>
+
+  <script>
+    const quizData = [
+      {
+        section: "Introduction to Industrial Chemistry",
+        questions: [
+          {
+            id: 1,
+            text: "What is the primary focus of industrial chemistry?",
+            options: [
+              { value: "a", text: "Studying chemical reactions in laboratories" },
+              { value: "b", text: "Transforming raw materials into useful products" },
+              { value: "c", text: "Analyzing environmental impacts of chemicals" },
+              { value: "d", text: "Developing theoretical chemical models" }
+            ],
+            answer: "b",
+            explanation: "Industrial chemistry applies physical and chemical methods to convert raw materials into products that benefit humanity, such as chemicals, food, and medicines."
+          },
+          {
+            id: 2,
+            text: "Which of the following is NOT a role of industrial chemistry?",
+            options: [
+              { value: "a", text: "Supporting economic growth" },
+              { value: "b", text: "Producing fertilizers and plastics" },
+              { value: "c", text: "Conducting astronomical research" },
+              { value: "d", text: "Providing materials for pharmaceuticals" }
+            ],
+            answer: "c",
+            explanation: "Industrial chemistry contributes to economic growth, chemical production, and pharmaceutical materials, but astronomical research is unrelated."
+          },
+          {
+            id: 3,
+            text: "What is a key characteristic of chemical industries?",
+            options: [
+              { value: "a", text: "Minimal energy consumption" },
+              { value: "b", text: "Use of chemical reactions to form products" },
+              { value: "c", text: "Avoidance of raw materials" },
+              { value: "d", text: "No safety protocols" }
+            ],
+            answer: "b",
+            explanation: "Chemical industries involve chemical reactions to transform raw materials into finished products, as stated in the document."
+          },
+          {
+            id: 4,
+            text: "Which sector does NOT typically rely on products from the chemical industry?",
+            options: [
+              { value: "a", text: "Agriculture" },
+              { value: "b", text: "Construction" },
+              { value: "c", text: "Astronomy" },
+              { value: "d", text: "Pharmaceuticals" }
+            ],
+            answer: "c",
+            explanation: "The chemical industry produces materials for agriculture, construction, and pharmaceuticals, but not for astronomy."
+          },
+          {
+            id: 5,
+            text: "Why do chemical industries perform quality checks?",
+            options: [
+              { value: "a", text: "To increase energy consumption" },
+              { value: "b", text: "To meet required product specifications" },
+              { value: "c", text: "To reduce the use of raw materials" },
+              { value: "d", text: "To avoid chemical reactions" }
+            ],
+            answer: "b",
+            explanation: "Quality checks ensure that products meet specified standards, as per the document."
+          }
+        ]
+      },
+      {
+        section: "Natural Resources and Industry",
+        questions: [
+          {
+            id: 6,
+            text: "Which gas from the atmosphere is used as a raw material in chemical industries?",
+            options: [
+              { value: "a", text: "Helium" },
+              { value: "b", text: "Nitrogen" },
+              { value: "c", text: "Argon" },
+              { value: "d", text: "Neon" }
+            ],
+            answer: "b",
+            explanation: "Nitrogen (N₂) from the atmosphere is a key raw material, used in processes like ammonia production."
+          },
+          {
+            id: 7,
+            text: "Which resource is obtained from the hydrosphere?",
+            options: [
+              { value: "a", text: "Coal" },
+              { value: "b", text: "Sodium chloride" },
+              { value: "c", text: "Iron ore" },
+              { value: "d", text: "Limestone" }
+            ],
+            answer: "b",
+            explanation: "Ocean water (hydrosphere) contains dissolved salts like sodium chloride, used in chemical industries."
+          },
+          {
+            id: 8,
+            text: "Which of the following is a non-renewable resource?",
+            options: [
+              { value: "a", text: "Solar energy" },
+              { value: "b", text: "Fossil fuels" },
+              { value: "c", text: "Water" },
+              { value: "d", text: "Plants" }
+            ],
+            answer: "b",
+            explanation: "Fossil fuels, such as coal and oil, are finite and cannot be regenerated, making them non-renewable."
+          },
+          {
+            id: 9,
+            text: "What is a sustainability challenge mentioned for renewable resources?",
+            options: [
+              { value: "a", text: "They are infinite" },
+              { value: "b", text: "Overuse leading to depletion" },
+              { value: "c", text: "They require no energy" },
+              { value: "d", text: "They are non-exploitable" }
+            ],
+            answer: "b",
+            explanation: "Renewable resources like water and forests are being depleted due to over-exploitation."
+          },
+          {
+            id: 10,
+            text: "What role do fossil fuels play in chemical industries?",
+            options: [
+              { value: "a", text: "Only as raw materials" },
+              { value: "b", text: "Only as energy sources" },
+              { value: "c", text: "Both as energy sources and raw materials" },
+              { value: "d", text: "Neither as energy nor raw materials" }
+            ],
+            answer: "c",
+            explanation: "Fossil fuels are essential for both energy and as raw materials in chemical production."
+          }
+        ]
+      },
+      {
+        section: "Manufacturing of Valuable Products/Chemicals",
+        questions: [
+          {
+            id: 11,
+            text: "What is the primary method for producing ammonia?",
+            options: [
+              { value: "a", text: "Ostwald process" },
+              { value: "b", text: "Haber-Bosch process" },
+              { value: "c", text: "Contact process" },
+              { value: "d", text: "Solvay process" }
+            ],
+            answer: "b",
+            explanation: "Ammonia is produced via the Haber-Bosch process, combining nitrogen and hydrogen under high pressure and temperature."
+          },
+          {
+            id: 12,
+            text: "What is a key application of ammonia?",
+            options: [
+              { value: "a", text: "Glass manufacturing" },
+              { value: "b", text: "Fertilizer production" },
+              { value: "c", text: "Paper production" },
+              { value: "d", text: "Cement manufacturing" }
+            ],
+            answer: "b",
+            explanation: "Ammonia is a key ingredient in nitrogen-based fertilizers like urea and ammonium nitrate."
+          },
+          {
+            id: 13,
+            text: "Which process is used to manufacture nitric acid?",
+            options: [
+              { value: "a", text: "Haber-Bosch process" },
+              { value: "b", text: "Ostwald process" },
+              { value: "c", text: "Contact process" },
+              { value: "d", text: "Chlor-alkali process" }
+            ],
+            answer: "b",
+            explanation: "Nitric acid is produced through the Ostwald process, involving ammonia oxidation and nitrogen dioxide absorption."
+          },
+          {
+            id: 14,
+            text: "What is the concentration of nitric acid produced by the Ostwald process?",
+            options: [
+              { value: "a", text: "100%" },
+              { value: "b", text: "68%" },
+              { value: "c", text: "50%" },
+              { value: "d", text: "25%" }
+            ],
+            answer: "b",
+            explanation: "The Ostwald process produces nitric acid with a concentration of 68%, as per the document."
+          },
+          {
+            id: 15,
+            text: "Which fertilizer is produced by reacting ammonia with carbon dioxide?",
+            options: [
+              { value: "a", text: "Ammonium nitrate" },
+              { value: "b", text: "Urea" },
+              { value: "c", text: "Ammonium sulphate" },
+              { value: "d", text: "Superphosphate" }
+            ],
+            answer: "b",
+            explanation: "Urea is produced by reacting ammonia with carbon dioxide under high pressure."
+          },
+          {
+            id: 16,
+            text: "What is the primary method for producing sulfuric acid?",
+            options: [
+              { value: "a", text: "Haber-Bosch process" },
+              { value: "b", text: "Contact process" },
+              { value: "c", text: "Ostwald process" },
+              { value: "d", text: "Solvay process" }
+            ],
+            answer: "b",
+            explanation: "Sulfuric acid is manufactured via the Contact process, involving sulfur dioxide oxidation."
+          },
+          {
+            id: 17,
+            text: "Which pesticide is synthesized from chloral and chlorobenzene?",
+            options: [
+              { value: "a", text: "Glyphosate" },
+              { value: "b", text: "DDT" },
+              { value: "c", text: "Organophosphates" },
+              { value: "d", text: "Fungicides" }
+            ],
+            answer: "b",
+            explanation: "DDT is produced through the synthesis of chloral and chlorobenzene, as mentioned in the document."
+          },
+          {
+            id: 18,
+            text: "What process is used to produce sodium carbonate?",
+            options: [
+              { value: "a", text: "Contact process" },
+              { value: "b", text: "Solvay process" },
+              { value: "c", text: "Ostwald process" },
+              { value: "d", text: "Chlor-alkali process" }
+            ],
+            answer: "b",
+            explanation: "Sodium carbonate is manufactured using the Solvay process, involving sodium chloride, limestone, and ammonia."
+          },
+          {
+            id: 19,
+            text: "What is a key application of sodium hydroxide?",
+            options: [
+              { value: "a", text: "Fertilizer production" },
+              { value: "b", text: "Soap production" },
+              { value: "c", text: "Glass manufacturing" },
+              { value: "d", text: "Explosives" }
+            ],
+            answer: "b",
+            explanation: "Sodium hydroxide is used in the saponification reaction to produce soap."
+          },
+          {
+            id: 20,
+            text: "Which gas is produced alongside sodium hydroxide in the chlor-alkali process?",
+            options: [
+              { value: "a", text: "Oxygen" },
+              { value: "b", text: "Chlorine" },
+              { value: "c", text: "Nitrogen" },
+              { value: "d", text: "Carbon dioxide" }
+            ],
+            answer: "b",
+            explanation: "The chlor-alkali process produces sodium hydroxide, chlorine gas, and hydrogen gas."
+          }
+        ]
+      },
+      {
+        section: "Manufacturing Industries in Ethiopia",
+        questions: [
+          {
+            id: 21,
+            text: "What is the main raw material for glass manufacturing in Ethiopia?",
+            options: [
+              { value: "a", text: "Limestone" },
+              { value: "b", text: "Silica sand" },
+              { value: "c", text: "Clay" },
+              { value: "d", text: "Sugarcane" }
+            ],
+            answer: "b",
+            explanation: "Silica sand is the primary raw material for glass production, as stated in the document."
+          },
+          {
+            id: 22,
+            text: "What is the primary material for ceramic production in Ethiopia?",
+            options: [
+              { value: "a", text: "Limestone" },
+              { value: "b", text: "Clay" },
+              { value: "c", text: "Silica sand" },
+              { value: "d", text: "Iron ore" }
+            ],
+            answer: "b",
+            explanation: "Clay is the main raw material used in the ceramic industry for products like tiles and pottery."
+          },
+          {
+            id: 23,
+            text: "What temperature is used in the clinkerization step of cement production?",
+            options: [
+              { value: "a", text: "1700°C" },
+              { value: "b", text: "1450°C" },
+              { value: "c", text: "600°C" },
+              { value: "d", text: "450°C" }
+            ],
+            answer: "b",
+            explanation: "Clinkerization in cement production occurs at about 1450°C in a rotary kiln."
+          },
+          {
+            id: 24,
+            text: "What is the primary raw material for Ethiopia’s sugar industry?",
+            options: [
+              { value: "a", text: "Sugar beets" },
+              { value: "b", text: "Sugarcane" },
+              { value: "c", text: "Maize" },
+              { value: "d", text: "Wheat straw" }
+            ],
+            answer: "b",
+            explanation: "Sugarcane is the main source for sugar production in Ethiopia."
+          },
+          {
+            id: 25,
+            text: "What is a key raw material for the paper and pulp industry in Ethiopia?",
+            options: [
+              { value: "a", text: "Limestone" },
+              { value: "b", text: "Wood" },
+              { value: "c", text: "Hides" },
+              { value: "d", text: "Clay" }
+            ],
+            answer: "b",
+            explanation: "Wood is processed into pulp for paper production, alongside agricultural residues and recycled paper."
+          },
+          {
+            id: 26,
+            text: "What is a common tanning agent used in Ethiopia’s tannery industry?",
+            options: [
+              { value: "a", text: "Sodium hydroxide" },
+              { value: "b", text: "Chromium salts" },
+              { value: "c", text: "Soda ash" },
+              { value: "d", text: "Gypsum" }
+            ],
+            answer: "b",
+            explanation: "Chromium salts are used as tanning agents to preserve hides and make them pliable."
+          },
+          {
+            id: 27,
+            text: "Which method is NOT used in food processing in Ethiopia?",
+            options: [
+              { value: "a", text: "Canning" },
+              { value: "b", text: "Fermentation" },
+              { value: "c", text: "Clinkerization" },
+              { value: "d", text: "Drying" }
+            ],
+            answer: "c",
+            explanation: "Clinkerization is specific to cement production, not food processing, which uses methods like canning and fermentation."
+          },
+          {
+            id: 28,
+            text: "What is the main feedstock for ethanol production in Ethiopia?",
+            options: [
+              { value: "a", text: "Limestone" },
+              { value: "b", text: "Sugarcane" },
+              { value: "c", text: "Clay" },
+              { value: "d", text: "Iron ore" }
+            ],
+            answer: "b",
+            explanation: "Sugarcane is the primary feedstock for ethanol production in Ethiopia."
+          },
+          {
+            id: 29,
+            text: "What is the main alkali used in soap production in Ethiopia?",
+            options: [
+              { value: "a", text: "Sodium carbonate" },
+              { value: "b", text: "Sodium hydroxide" },
+              { value: "c", text: "Ammonia" },
+              { value: "d", text: "Sulfuric acid" }
+            ],
+            answer: "b",
+            explanation: "Sodium hydroxide is used in the saponification reaction to produce soap."
+          },
+          {
+            id: 30,
+            text: "What is a key application of detergents produced in Ethiopia?",
+            options: [
+              { value: "a", text: "Glass manufacturing" },
+              { value: "b", text: "Household cleaning" },
+              { value: "c", text: "Cement production" },
+              { value: "d", text: "Paper production" }
+            ],
+            answer: "b",
+            explanation: "Detergents are used for household cleaning tasks like dishwashing and laundry."
+          }
+        ]
+      }
+    ];
+
+    let currentSection = 0;
+    let userAnswers = {};
+    let showResults = false;
+    let score = 0;
+
+    const quizContent = document.getElementById('quiz-content');
+    const navigation = document.getElementById('navigation');
+    const results = document.getElementById('results');
+    const backToTop = document.getElementById('back-to-top');
+
+    function renderQuiz() {
+      quizContent.innerHTML = '';
+      navigation.innerHTML = '';
+      results.innerHTML = '';
+
+      if (!showResults) {
+        const section = quizData[currentSection];
+        quizContent.innerHTML = `<h2 class="text-xl font-semibold mb-4">${section.section}</h2>`;
+        section.questions.forEach((question) => {
+          const questionDiv = document.createElement('div');
+          questionDiv.className = 'question';
+          questionDiv.innerHTML = `<p class="font-medium">${question.id}. ${question.text}</p>`;
+          question.options.forEach((option) => {
+            const optionLabel = document.createElement('label');
+            optionLabel.className = 'option';
+            optionLabel.innerHTML = `
+              <input type="radio" name="question-${question.id}" value="${option.value}" ${userAnswers[question.id] === option.value ? 'checked' : ''}>
+              ${option.value}. ${option.text}
+            `;
+            questionDiv.appendChild(optionLabel);
+          });
+          quizContent.appendChild(questionDiv);
+        });
+
+        const prevButton = document.createElement('button');
+        prevButton.textContent = 'Previous';
+        prevButton.className = `px-4 py-2 rounded ${currentSection === 0 ? 'bg-gray-300 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600 text-white'}`;
+        prevButton.disabled = currentSection === 0;
+        prevButton.onclick = () => {
+          if (currentSection > 0) {
+            saveAnswers();
+            currentSection--;
+            renderQuiz();
+          }
+        };
+
+        const nextButton = document.createElement('button');
+        nextButton.textContent = currentSection < quizData.length - 1 ? 'Next' : 'Submit';
+        nextButton.className = 'px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600';
+        nextButton.onclick = () => {
+          saveAnswers();
+          if (currentSection < quizData.length - 1) {
+            currentSection++;
+            renderQuiz();
+          } else {
+            calculateScore();
+            showResults = true;
+            renderQuiz();
+          }
+        };
+
+        navigation.appendChild(prevButton);
+        navigation.appendChild(nextButton);
+      } else {
+        results.innerHTML = `
+          <h2 class="text-xl font-semibold mb-4">Quiz Results</h2>
+          <p class="text-lg mb-4">Your Score: ${score} out of 30 (${((score / 30) * 100).toFixed(2)}%)</p>
+          <p class="mb-4">Review the explanations below to strengthen your understanding of incorrect answers.</p>
+        `;
+        quizData.forEach((section) => {
+          const sectionDiv = document.createElement('div');
+          sectionDiv.className = 'mb-6';
+          sectionDiv.innerHTML = `<h3 class="text-lg font-medium mb-2">${section.section}</h3>`;
+          section.questions.forEach((question) => {
+            const questionDiv = document.createElement('div');
+            questionDiv.className = 'mb-4';
+            const userAnswerText = question.options.find(opt => opt.value === userAnswers[question.id])?.text || 'Not answered';
+            const correctAnswerText = question.options.find(opt => opt.value === question.answer).text;
+            questionDiv.innerHTML = `
+              <p class="font-medium">${question.id}. ${question.text}</p>
+              <p class="correct">Correct Answer: ${question.answer}. ${correctAnswerText}</p>
+              <p class="${userAnswers[question.id] === question.answer ? 'correct' : 'incorrect'}">
+                Your Answer: ${userAnswers[question.id] ? `${userAnswers[question.id]}. ${userAnswerText}` : 'Not answered'}
+              </p>
+              <p><strong>Explanation:</strong> ${question.explanation}</p>
+            `;
+            sectionDiv.appendChild(questionDiv);
+          });
+          results.appendChild(sectionDiv);
+        });
+
+        const restartButton = document.createElement('button');
+        restartButton.textContent = 'Restart Quiz';
+        restartButton.className = 'px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600';
+        restartButton.onclick = () => {
+          currentSection = 0;
+          userAnswers = {};
+          showResults = false;
+          score = 0;
+          renderQuiz();
+        };
+        results.appendChild(restartButton);
+      }
+    }
+
+    function saveAnswers() {
+      const section = quizData[currentSection];
+      section.questions.forEach((question) => {
+        const selectedOption = document.querySelector(`input[name="question-${question.id}"]:checked`);
+        if (selectedOption) {
+          userAnswers[question.id] = selectedOption.value;
+        }
+      });
+    }
+
+    function calculateScore() {
+      score = 0;
+      quizData.forEach((section) => {
+        section.questions.forEach((question) => {
+          if (userAnswers[question.id] === question.answer) {
+            score++;
+          }
+        });
+      });
+    }
+
+    // Back to Top functionality
+    backToTop.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 200) {
+        backToTop.classList.add('visible');
+      } else {
+        backToTop.classList.remove('visible');
+      }
+    });
+
+    renderQuiz();
+  </script>
+</body>
+</html>
